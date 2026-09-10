@@ -1,0 +1,252 @@
+/* New York's Best Experiences — QR opt-in pages
+   Brand pulled from newyorksbestexperiences.com: cream ground, dark brown
+   text, terracotta accent (from the client's kiosk reference), rounded
+   hand-lettered headline feel. */
+
+:root {
+  --bg: #fbf6ea;
+  --card: #fffdf8;
+  --text: #3e2a21;
+  --text-soft: #6b5148;
+  --border: #e8ddc4;
+  --accent: #c1592c;
+  --accent-dark: #a3461f;
+  --accent-soft: #f4e2d3;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 64px;
+  background-image:
+    radial-gradient(ellipse at top left, rgba(193, 89, 44, 0.06), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(193, 89, 44, 0.05), transparent 55%);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 560px;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 28px;
+  max-width: 220px;
+  height: auto;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  box-shadow: 0 12px 32px rgba(62, 42, 33, 0.08);
+}
+
+h1 {
+  font-family: 'Baloo 2', 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.25;
+  color: var(--text);
+  margin: 0 0 10px;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.subcopy {
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 15.5px;
+  line-height: 1.55;
+  margin: 0 0 28px;
+  text-wrap: balance;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.field { margin-bottom: 18px; }
+
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 13px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus {
+  border-color: var(--accent);
+}
+
+.interests-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.interests-head label { margin: 0; }
+
+.interests-count {
+  font-size: 13px;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.interests-count.full { color: var(--accent-dark); }
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 480px) {
+  .interests-grid { grid-template-columns: repeat(2, 1fr); }
+  .card { padding: 28px 20px 24px; }
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 11px 6px;
+  transition: background .12s ease, color .12s ease, transform .08s ease;
+  user-select: none;
+}
+
+.chip input:checked + span {
+  background: var(--accent);
+  color: #fff;
+}
+
+.chip input:focus-visible + span {
+  border-color: var(--text);
+}
+
+.chip input:disabled + span {
+  opacity: 0.4;
+}
+
+.interests-help {
+  font-size: 12.5px;
+  color: var(--text-soft);
+  margin: 6px 0 22px;
+}
+
+button.submit {
+  display: block;
+  width: 100%;
+  font-family: 'Baloo 2', 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: background .15s ease, transform .08s ease;
+}
+
+button.submit:hover { background: var(--accent-dark); }
+button.submit:active { transform: scale(0.99); }
+
+button.submit:disabled {
+  background: #d8c9b8;
+  cursor: not-allowed;
+}
+
+.error-msg {
+  display: none;
+  background: #fdeeea;
+  color: #a33a1f;
+  border: 1px solid #f3c9ba;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.error-msg.show { display: block; }
+
+.footer-note {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  margin-top: 22px;
+}
+
+/* Thank-you pages */
+.thanks-card {
+  text-align: center;
+}
+
+.thanks-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thanks-icon svg { width: 32px; height: 32px; }
+
+.thanks-card h1 { margin-bottom: 14px; }
+
+.thanks-card p {
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}

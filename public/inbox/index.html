@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New York's Best Experiences — Tell Us About You</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="../assets/nybe-logo.png" alt="New York's Best Experiences">
+  <div class="card">
+    <h1>What's your&nbsp;New York adventure?</h1>
+    <p class="subcopy">Tell us a little about you and we'll help you find the best New York has to offer &mdash; then spin the wheel for a little something extra.</p>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <form id="optin-form" novalidate>
+      <div class="field">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" name="firstName" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+      </div>
+
+      <!-- honeypot -->
+      <div style="position:absolute;left:-9999px;" aria-hidden="true">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="interests-head">
+        <label>What do you love?</label>
+        <span id="interests-count" class="interests-count">0 of 5 selected</span>
+      </div>
+      <div class="interests-grid">
+        <label class="chip"><input type="checkbox" name="interests" value="Foodie"><span>Foodie</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Wine"><span>Wine</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Culture/Art"><span>Culture/Art</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Hiking"><span>Hiking</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Fishing"><span>Fishing</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Camping/RVing"><span>Camping/RVing</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Family Fun"><span>Family Fun</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Craft Beverage"><span>Craft Beverage</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Cool Towns"><span>Cool Towns</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Events"><span>Events</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Beach"><span>Beach</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Autumn"><span>Autumn</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Lodging"><span>Lodging</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Winter Fun"><span>Winter Fun</span></label>
+        <label class="chip"><input type="checkbox" name="interests" value="Adventure"><span>Adventure</span></label>
+      </div>
+      <p class="interests-help">Choose up to 5.</p>
+
+      <button type="submit" class="submit" id="submit-btn">Submit</button>
+    </form>
+    <p class="footer-note">We'll only use this to send you New York travel inspiration.</p>
+  </div>
+</div>
+<script>
+  window.NYBE_CONFIG = { source: 'qr-inbox', thanksUrl: 'thanks.html' };
+</script>
+<script src="../assets/optin.js"></script>
+</body>
+</html>
