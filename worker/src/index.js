@@ -62,11 +62,15 @@ export default {
       return j({ ok: false, error: "upstream_unreachable" }, 502, cors);
     }
 
+    const sourceLabel = source === "qr-spin" ? "the Spin Wheel QR Code"
+      : source === "qr-inbox" ? "the Check Inbox QR Code"
+      : "a QR Code";
+    const sourceTag = source === "qr-spin" ? "QR Code - Spin Wheel"
+      : source === "qr-inbox" ? "QR Code - Check Inbox"
+      : "QR Code";
+
     // 2) ADDITIVE TAGS — never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
-      const sourceTag = source === "qr-spin" ? "QR Code - Spin Wheel"
-        : source === "qr-inbox" ? "QR Code - Check Inbox"
-        : "QR Code";
       const tags = [sourceTag, ...interests.map((i) => `Interest - ${i}`)];
       try {
         await fetch(`${API}/contacts/${contactId}/tags`, {
@@ -76,6 +80,20 @@ export default {
         });
       } catch {
         // contact exists even if the tag call failed; not fatal to the submission
+      }
+    }
+
+    // 3) NOTE — best-effort; never fail the submission on it.
+    if (contactId) {
+      const noteBody = `Came in through ${sourceLabel}. Interests: ${interests.join(", ")}.`;
+      try {
+        await fetch(`${API}/contacts/${contactId}/notes`, {
+          method: "POST",
+          headers: H,
+          body: JSON.stringify({ body: noteBody }),
+        });
+      } catch {
+        // non-critical
       }
     }
 
