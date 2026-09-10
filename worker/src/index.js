@@ -5,6 +5,17 @@
 const API = "https://services.leadconnectorhq.com";
 const VERSION = "2021-07-28";
 const MAX_INTERESTS = 5;
+const INTERESTS_FIELD_ID = "uv1wSb5LF0fkAPswUFHL"; // "Interests" custom field (contact.interests)
+
+// "Foodie" / "Foodie and Wine" / "Foodie, Wine and Hiking" — first word capitalized, "and" before the last.
+function formatInterestList(items) {
+  if (items.length === 0) return "";
+  const list = items.slice();
+  list[0] = list[0].charAt(0).toUpperCase() + list[0].slice(1);
+  if (list.length === 1) return list[0];
+  if (list.length === 2) return `${list[0]} and ${list[1]}`;
+  return `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}`;
+}
 
 export default {
   async fetch(req, env) {
@@ -44,12 +55,15 @@ export default {
       Accept: "application/json",
     };
 
+    const interestList = formatInterestList(interests);
+
     // 1) UPSERT (create-or-update by email within the location)
     const upsertBody = {
       locationId: env.GHL_LOCATION_ID,
       firstName,
       email,
       source,
+      customFields: [{ id: INTERESTS_FIELD_ID, value: interestList }],
     };
 
     let contactId;
@@ -85,7 +99,7 @@ export default {
 
     // 3) NOTE — best-effort; never fail the submission on it.
     if (contactId) {
-      const noteBody = `Came in through ${sourceLabel}. Interests: ${interests.join(", ")}.`;
+      const noteBody = `Came in through ${sourceLabel}. Interests: ${interestList}.`;
       try {
         await fetch(`${API}/contacts/${contactId}/notes`, {
           method: "POST",
