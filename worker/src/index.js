@@ -1,13 +1,13 @@
-// New York's Best Experiences — QR opt-in intake Worker
+// New York's Best Experiences: QR opt-in intake Worker
 // Custom form (spin/ and inbox/ pages) --POST JSON--> this Worker --> LeadConnector upsert + tags.
-// The Private Integration Token lives ONLY in the Worker secret GHL_PIT — never in page JS or the repo.
+// The Private Integration Token lives ONLY in the Worker secret GHL_PIT. Never in page JS or the repo.
 
 const API = "https://services.leadconnectorhq.com";
 const VERSION = "2021-07-28";
 const MAX_INTERESTS = 5;
 const INTERESTS_FIELD_ID = "uv1wSb5LF0fkAPswUFHL"; // "Interests" custom field (contact.interests)
 
-// "Foodie" / "Foodie and Wine" / "Foodie, Wine and Hiking" — first word capitalized, "and" before the last.
+// "Foodie" / "Foodie and Wine" / "Foodie, Wine and Hiking": first word capitalized, "and" before the last.
 function formatInterestList(items) {
   if (items.length === 0) return "";
   const list = items.slice();
@@ -36,11 +36,12 @@ export default {
     let d;
     try { d = await req.json(); } catch { return j({ ok: false, error: "bad_json" }, 400, cors); }
 
-    // honeypot — hidden field bots fill in, humans leave blank. Silently succeed so bots learn nothing.
+    // honeypot: hidden field bots fill in, humans leave blank. Silently succeed so bots learn nothing.
     if (d.company) return j({ ok: true }, 200, cors);
 
     const firstName = (d.firstName || "").trim();
     const email = (d.email || "").trim();
+    const zip = (d.zip || "").trim().slice(0, 10);
     const interests = Array.isArray(d.interests) ? d.interests.filter((s) => typeof s === "string" && s.trim()).slice(0, MAX_INTERESTS) : [];
     const source = (d.source || "qr").trim();
 
@@ -63,6 +64,7 @@ export default {
       firstName,
       email,
       source,
+      ...(zip ? { postalCode: zip } : {}),
       customFields: [{ id: INTERESTS_FIELD_ID, value: interestList }],
     };
 
@@ -83,7 +85,7 @@ export default {
       : source === "qr-inbox" ? "QR Code - Check Inbox"
       : "QR Code";
 
-    // 2) ADDITIVE TAGS — never a full PUT, which would replace the contact's existing tags.
+    // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
       const tags = [sourceTag, ...interests.map((i) => `Interest - ${i}`)];
       try {
@@ -97,7 +99,7 @@ export default {
       }
     }
 
-    // 3) NOTE — best-effort; never fail the submission on it.
+    // 3) NOTE: best-effort, never fail the submission on it.
     if (contactId) {
       const noteBody = `Came in through ${sourceLabel}. Interests: ${interestList}.`;
       try {

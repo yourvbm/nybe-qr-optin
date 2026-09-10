@@ -1,4 +1,4 @@
-/* New York's Best Experiences — QR opt-in pages
+/* New York's Best Experiences: QR opt-in pages
    Brand pulled from newyorksbestexperiences.com: cream ground, dark brown
    text, terracotta accent (from the client's kiosk reference), rounded
    hand-lettered headline feel. */
@@ -46,6 +46,16 @@ body {
   margin: 0 auto 28px;
   max-width: 220px;
   height: auto;
+}
+
+a:has(> .logo) {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+a:has(> .logo) .logo {
+  margin-bottom: 28px;
 }
 
 .card {

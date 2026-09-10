@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New York's Best Experiences — Tell Us About You</title>
+<title>New York's Best Experiences | Tell Us About You</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +14,8 @@
 <div class="wrap">
   <img class="logo" src="../assets/nybe-logo.png" alt="New York's Best Experiences">
   <div class="card">
-    <h1>What's your&nbsp;New York adventure?</h1>
-    <p class="subcopy">Tell us a little about you and we'll help you find the best New York has to offer &mdash; then spin the wheel for a little something extra.</p>
+    <h1>What's your New York State&nbsp;adventure?</h1>
+    <p class="subcopy">Tell us a little about you and we'll help you find the best New York State has to offer, then spin the wheel for a little something extra.</p>
 
     <div id="error-msg" class="error-msg"></div>
 
@@ -27,6 +27,10 @@
       <div class="field">
         <label for="email">Email</label>
         <input type="email" id="email" name="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="zip">Zip code</label>
+        <input type="text" id="zip" name="zip" inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" maxlength="10" autocomplete="postal-code">
       </div>
 
       <!-- honeypot -->
@@ -60,7 +64,7 @@
 
       <button type="submit" class="submit" id="submit-btn">Submit</button>
     </form>
-    <p class="footer-note">We'll only use this to send you New York travel inspiration.</p>
+    <p class="footer-note">We'll only use this to send you New York State travel inspiration.</p>
   </div>
 </div>
 <script>

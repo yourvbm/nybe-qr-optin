@@ -46,6 +46,7 @@
 
     var firstName = form.firstName.value.trim();
     var email = form.email.value.trim();
+    var zip = form.zip ? form.zip.value.trim() : '';
     var interests = selectedInterests().map(function (i) { return i.value; });
 
     if (!firstName) return showError('Please enter your first name.');
@@ -61,6 +62,7 @@
       body: JSON.stringify({
         firstName: firstName,
         email: email,
+        zip: zip,
         interests: interests,
         source: config.source || 'qr',
         company: form.company ? form.company.value : '' // honeypot
