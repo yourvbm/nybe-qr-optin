@@ -2,7 +2,7 @@
 // Set window.NYBE_CONFIG = { source: 'spin' | 'inbox', thanksUrl: '...' } before this script runs.
 
 (function () {
-  var WORKER_URL = 'https://nybe-qr-worker.yourvbm.workers.dev/api/optin';
+  var WORKER_URL = 'https://nybe-qr-worker.miriam-68c.workers.dev/api/optin';
 
   var config = window.NYBE_CONFIG || {};
   var form = document.getElementById('optin-form');
