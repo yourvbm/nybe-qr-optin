@@ -64,7 +64,10 @@ export default {
 
     // 2) ADDITIVE TAGS — never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
-      const tags = ["QR Code", ...interests.map((i) => `Interest - ${i}`)];
+      const sourceTag = source === "qr-spin" ? "QR Code - Spin Wheel"
+        : source === "qr-inbox" ? "QR Code - Check Inbox"
+        : "QR Code";
+      const tags = [sourceTag, ...interests.map((i) => `Interest - ${i}`)];
       try {
         await fetch(`${API}/contacts/${contactId}/tags`, {
           method: "POST",
