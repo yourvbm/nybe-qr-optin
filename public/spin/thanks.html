@@ -14,14 +14,37 @@
 <div class="wrap">
   <img class="logo" src="../assets/nybe-logo.png" alt="New York's Best Experiences">
   <div class="card thanks-card">
-    <div class="thanks-icon">
+    <div class="thanks-icon spin">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 13l4 4L19 7" stroke="#EE6E31" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12" cy="12" r="9" stroke="#EE6E31" stroke-width="2"/>
+        <path d="M12 3v18M12 3l7.79 4.5M12 3L4.21 7.5M12 21l7.79-4.5M12 21L4.21 16.5M4.21 7.5v9M19.79 7.5v9" stroke="#EE6E31" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="1.6" fill="#EE6E31"/>
       </svg>
     </div>
     <h1>All set! You're&nbsp;ready to spin the wheel!</h1>
-    <p>Head on over to the wheel and give it a spin! In the meantime, we sent a little goodie to your inbox. Check spam if you don't see it, and add us to your contacts so you stay in the know.</p>
+    <p id="body-copy">We also sent a little goodie to your inbox. Be sure you got it (check spam if you don't see it) and stick around for the best NY tips!</p>
   </div>
 </div>
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var raw = params.get('interests');
+    if (!raw) return;
+    var items = raw.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!items.length) return;
+
+    function formatList(list) {
+      list = list.slice();
+      list[0] = list[0].charAt(0).toUpperCase() + list[0].slice(1);
+      if (list.length === 1) return list[0];
+      if (list.length === 2) return list[0] + ' and ' + list[1];
+      return list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1];
+    }
+
+    document.getElementById('body-copy').textContent =
+      "We also sent a little goodie to your inbox. Be sure you got it (check spam if you don't see it) and stick around for the best tips for " +
+      formatList(items) + ' in NY!';
+  })();
+</script>
 </body>
 </html>

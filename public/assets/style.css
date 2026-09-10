@@ -241,6 +241,15 @@ button.submit:disabled {
 
 .thanks-icon svg { width: 32px; height: 32px; }
 
+.thanks-icon.spin svg {
+  transform-origin: 50% 50%;
+  animation: spin-wheel 3.5s linear infinite;
+}
+
+@keyframes spin-wheel {
+  to { transform: rotate(360deg); }
+}
+
 .thanks-card h1 { margin-bottom: 14px; }
 
 .thanks-card p {

@@ -72,7 +72,9 @@
       })
       .then(function (data) {
         if (!data || !data.ok) throw new Error('not_ok');
-        window.location.href = config.thanksUrl || 'thanks.html';
+        var base = config.thanksUrl || 'thanks.html';
+        var sep = base.indexOf('?') === -1 ? '?' : '&';
+        window.location.href = base + sep + 'interests=' + encodeURIComponent(interests.join(','));
       })
       .catch(function () {
         submitBtn.disabled = false;
