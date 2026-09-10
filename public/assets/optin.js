@@ -51,6 +51,7 @@
 
     if (!firstName) return showError('Please enter your first name.');
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showError('Please enter a valid email address.');
+    if (!zip) return showError('Please enter your zip code.');
     if (interests.length < 1) return showError('Please choose at least one interest.');
 
     submitBtn.disabled = true;

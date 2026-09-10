@@ -47,6 +47,7 @@ export default {
 
     if (!firstName) return j({ ok: false, error: "first_name_required" }, 422, cors);
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return j({ ok: false, error: "bad_email" }, 422, cors);
+    if (!zip) return j({ ok: false, error: "zip_required" }, 422, cors);
     if (interests.length < 1) return j({ ok: false, error: "interests_required" }, 422, cors);
 
     const H = {
