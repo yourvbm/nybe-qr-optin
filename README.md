@@ -8,9 +8,14 @@ same form and a different thank-you page:
 - `/inbox/`: "All Set! Check your inbox..." (used when there's no in-person wheel)
 
 Form fields: first name, email, zip code, choose up to 5 interests (at least one required). On
-submit, a Cloudflare Worker (`worker/`) upserts a GHL contact, tags it `QR Code - Spin Wheel` or
-`QR Code - Check Inbox` (by source) plus one `Interest - <name>` tag per selected interest,
+submit, a Cloudflare Worker (`worker/`) upserts a GHL contact, tags it `QR - Spin Wheel` or
+`QR - Check Inbox` (by source) plus one `Interest - <name>` tag per selected interest,
 populates a custom "Interests" field with a natural-language list, and adds a contact note.
+
+**Gotcha:** never tag a contact with anything containing the literal phrase "QR Code". GHL
+silently strips any tag matching that pattern a few seconds after it's applied (confirmed live
+2026-09-10), reserved for their own native QR-tracking feature. Use "QR - <name>" instead, which
+is unaffected.
 
 ## Structure
 

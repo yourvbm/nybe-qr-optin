@@ -82,9 +82,12 @@ export default {
     const sourceLabel = source === "qr-spin" ? "the Spin Wheel QR Code"
       : source === "qr-inbox" ? "the Check Inbox QR Code"
       : "a QR Code";
-    const sourceTag = source === "qr-spin" ? "QR Code - Spin Wheel"
-      : source === "qr-inbox" ? "QR Code - Check Inbox"
-      : "QR Code";
+    // NOTE: GHL silently strips any tag containing the exact phrase "QR Code" a few seconds after
+    // it's applied (reserved for their own native QR-tracking feature) - confirmed live 2026-09-10.
+    // "QR - <name>" survives fine, so that's what we use instead of "QR Code - <name>".
+    const sourceTag = source === "qr-spin" ? "QR - Spin Wheel"
+      : source === "qr-inbox" ? "QR - Check Inbox"
+      : "QR";
 
     // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
