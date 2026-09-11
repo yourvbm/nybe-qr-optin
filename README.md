@@ -8,15 +8,15 @@ same form and a different thank-you page:
 - `/inbox/`: "All Set! Check your inbox..." (used when there's no in-person wheel)
 
 Form fields: first name, email, zip code, choose up to 5 interests (at least one required). On
-submit, a Cloudflare Worker (`worker/`) upserts a GHL contact, tags it `Source - Spin Wheel` or
-`Source - Check Inbox` (by source) plus one `Interest - <name>` tag per selected interest,
+submit, a Cloudflare Worker (`worker/`) upserts a GHL contact, tags it `QR - Spin Wheel` or
+`QR - Check Inbox` (by source) plus one `Interest - <name>` tag per selected interest,
 populates a custom "Interests" field with a natural-language list, and adds a contact note.
 
-**Gotcha:** never tag a contact with anything starting with "QR" ("QR Code - ...", plain
-"QR - ...", etc). GHL silently strips those tags a few seconds after they're applied, no error
-returned, confirmed live on two different locations (2026-09-10, 2026-09-11). "Source - <name>"
-has survived reliably across repeated tests; re-verify with a side-by-side tag test before
-trusting anything new.
+**Tag naming matters here:** the `QR - Spin Wheel` tag has to exactly match the trigger tag on
+the "QR Code - Spin the Wheel" GHL workflow, which removes that tag as its own first action (then
+adds `qr code - spin wheel` and sends an email). A tag disappearing a few seconds after being
+applied is that workflow firing correctly, not a bug. If the tag names here ever need to change,
+read the actual workflow definition first (don't guess from watching a tag vanish).
 
 ## Structure
 
