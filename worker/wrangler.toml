@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2024-11-01"
 
 [vars]
-GHL_LOCATION_ID = "F8nRTxGRWP2q1rKyX9Y1"
+GHL_LOCATION_ID = "2gVEI0KyyJD3VRCCkaRX"
 ALLOWED_ORIGIN = "https://qr.newyorksbestexperiences.com"
 
 # secret (do NOT put in vars / repo):

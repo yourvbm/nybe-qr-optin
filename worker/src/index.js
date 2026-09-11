@@ -5,7 +5,7 @@
 const API = "https://services.leadconnectorhq.com";
 const VERSION = "2021-07-28";
 const MAX_INTERESTS = 5;
-const INTERESTS_FIELD_ID = "uv1wSb5LF0fkAPswUFHL"; // "Interests" custom field (contact.interests)
+const INTERESTS_FIELD_ID = "tNGIMk5n6C3uGPxQf22c"; // "Interests" custom field (contact.interests)
 
 // "Foodie" / "Foodie and Wine" / "Foodie, Wine and Hiking": first word capitalized, "and" before the last.
 function formatInterestList(items) {
@@ -82,12 +82,14 @@ export default {
     const sourceLabel = source === "qr-spin" ? "the Spin Wheel QR Code"
       : source === "qr-inbox" ? "the Check Inbox QR Code"
       : "a QR Code";
-    // NOTE: GHL silently strips any tag containing the exact phrase "QR Code" a few seconds after
-    // it's applied (reserved for their own native QR-tracking feature) - confirmed live 2026-09-10.
-    // "QR - <name>" survives fine, so that's what we use instead of "QR Code - <name>".
-    const sourceTag = source === "qr-spin" ? "QR - Spin Wheel"
-      : source === "qr-inbox" ? "QR - Check Inbox"
-      : "QR";
+    // NOTE: GHL silently strips tags starting with "QR" (both "QR Code - ..." and plain
+    // "QR - ...") a few seconds after they're applied, confirmed live on two different locations
+    // (2026-09-10, 2026-09-11) by tagging a test contact with several strings side by side and
+    // checking which survived after 15-20s. "Source - <name>" survives reliably, so that's what
+    // drives the automation instead.
+    const sourceTag = source === "qr-spin" ? "Source - Spin Wheel"
+      : source === "qr-inbox" ? "Source - Check Inbox"
+      : "Source - QR";
 
     // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
