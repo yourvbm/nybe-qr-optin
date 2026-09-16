@@ -92,7 +92,7 @@ export default {
 
     // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
     if (contactId) {
-      const tags = [sourceTag, ...interests.map((i) => `Interest - ${i}`)];
+      const tags = [sourceTag, ...interests];
       try {
         await fetch(`${API}/contacts/${contactId}/tags`, {
           method: "POST",
