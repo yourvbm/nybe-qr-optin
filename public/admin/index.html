@@ -29,6 +29,7 @@
   .bar-row { margin-bottom: 14px; }
   .bar-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
   .bar-label .count { color: var(--accent-dark); font-weight: 800; }
+  .bar-label .pct { color: var(--text-soft); font-weight: 600; font-size: 0.8em; }
   .bar-track { background: var(--accent-soft); border-radius: 999px; height: 14px; overflow: hidden; }
   .bar-fill { background: var(--accent); height: 100%; border-radius: 999px; transition: width 0.4s ease; }
   .state-msg { color: var(--text-soft); font-size: 0.9rem; padding: 20px 0; text-align: center; }
@@ -68,21 +69,22 @@
     var counts = data.counts.filter(function (c) { return c[1] !== null; });
     counts.sort(function (a, b) { return b[1] - a[1]; });
     var max = counts.reduce(function (m, c) { return Math.max(m, c[1]); }, 1);
+    var sum = counts.reduce(function (s, c) { return s + c[1]; }, 0);
 
     barsEl.innerHTML = "";
     counts.forEach(function (c) {
       var tag = c[0], count = c[1];
       var row = document.createElement("div");
       row.className = "bar-row";
-      var pct = Math.round((count / max) * 100);
+      var barPct = Math.round((count / max) * 100);
+      var sharePct = sum ? ((count / sum) * 100).toFixed(1) : "0.0";
       row.innerHTML =
-        '<div class="bar-label"><span>' + (LABELS[tag] || tag) + '</span><span class="count">' + count + '</span></div>' +
-        '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>';
+        '<div class="bar-label"><span>' + (LABELS[tag] || tag) + '</span><span class="count">' + count + ' <span class="pct">(' + sharePct + '%)</span></span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + barPct + '%"></div></div>';
       barsEl.appendChild(row);
     });
 
-    var sum = counts.reduce(function (s, c) { return s + c[1]; }, 0);
-    totalEl.textContent = sum + " tag selections across " + counts.length + " interest categories. Counts are per-tag (a contact with 3 interests counts once in each).";
+    totalEl.textContent = sum + " tag selections across " + counts.length + " interest categories. Counts are per-tag (a contact with 3 interests counts once in each); percentages are each tag's share of all selections.";
 
     var d = new Date(data.generatedAt);
     updatedEl.textContent = "Live from GHL — updated " + d.toLocaleString();
