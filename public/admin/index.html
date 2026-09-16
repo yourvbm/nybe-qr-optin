@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interest Tags — New York's Best Experiences</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  body { align-items: flex-start; padding-top: 40px; }
+  .dash-wrap { width: 100%; max-width: 720px; }
+  .dash-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+  }
+  .dash-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .dash-head h1 { font-family: 'Baloo 2', sans-serif; font-size: 1.5rem; margin: 0; color: var(--text); }
+  .dash-sub { color: var(--text-soft); font-size: 0.85rem; margin: 0 0 24px; }
+  .refresh-btn {
+    background: var(--accent); color: #fff; border: none; border-radius: 999px;
+    padding: 8px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+  }
+  .refresh-btn:disabled { opacity: 0.5; cursor: default; }
+  .bar-row { margin-bottom: 14px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .bar-label .count { color: var(--accent-dark); font-weight: 800; }
+  .bar-track { background: var(--accent-soft); border-radius: 999px; height: 14px; overflow: hidden; }
+  .bar-fill { background: var(--accent); height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+  .state-msg { color: var(--text-soft); font-size: 0.9rem; padding: 20px 0; text-align: center; }
+  .total-line { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-soft); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="dash-wrap">
+  <div class="dash-card">
+    <div class="dash-head">
+      <h1>Interest tag breakdown</h1>
+      <button class="refresh-btn" id="refreshBtn" type="button">Refresh</button>
+    </div>
+    <p class="dash-sub" id="updatedLine">Loading&hellip;</p>
+    <div id="bars"></div>
+    <p class="total-line" id="totalLine"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var WORKER_URL = "https://nybe-qr-worker.miriam-68c.workers.dev/api/interest-stats";
+  var LABELS = {
+    "foodie": "Foodie", "wine": "Wine", "culture/art": "Culture/Art", "hiking": "Hiking",
+    "fishing": "Fishing", "camping/rving": "Camping/RVing", "family fun": "Family Fun",
+    "craft beverage": "Craft Beverage", "cool towns": "Cool Towns", "events": "Events",
+    "beach": "Beach", "autumn": "Autumn", "lodging": "Lodging", "winter fun": "Winter Fun",
+    "adventure": "Adventure"
+  };
+
+  var barsEl = document.getElementById("bars");
+  var updatedEl = document.getElementById("updatedLine");
+  var totalEl = document.getElementById("totalLine");
+  var btn = document.getElementById("refreshBtn");
+
+  function render(data) {
+    var counts = data.counts.filter(function (c) { return c[1] !== null; });
+    counts.sort(function (a, b) { return b[1] - a[1]; });
+    var max = counts.reduce(function (m, c) { return Math.max(m, c[1]); }, 1);
+
+    barsEl.innerHTML = "";
+    counts.forEach(function (c) {
+      var tag = c[0], count = c[1];
+      var row = document.createElement("div");
+      row.className = "bar-row";
+      var pct = Math.round((count / max) * 100);
+      row.innerHTML =
+        '<div class="bar-label"><span>' + (LABELS[tag] || tag) + '</span><span class="count">' + count + '</span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>';
+      barsEl.appendChild(row);
+    });
+
+    var sum = counts.reduce(function (s, c) { return s + c[1]; }, 0);
+    totalEl.textContent = sum + " tag selections across " + counts.length + " interest categories. Counts are per-tag (a contact with 3 interests counts once in each).";
+
+    var d = new Date(data.generatedAt);
+    updatedEl.textContent = "Live from GHL — updated " + d.toLocaleString();
+  }
+
+  function load() {
+    btn.disabled = true;
+    updatedEl.textContent = "Loading…";
+    fetch(WORKER_URL)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.ok) throw new Error(data.error || "failed");
+        render(data);
+      })
+      .catch(function () {
+        barsEl.innerHTML = "";
+        updatedEl.textContent = "";
+        totalEl.textContent = "";
+        var msg = document.createElement("p");
+        msg.className = "state-msg";
+        msg.textContent = "Couldn't load stats right now. Try refreshing.";
+        barsEl.appendChild(msg);
+      })
+      .finally(function () { btn.disabled = false; });
+  }
+
+  btn.addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

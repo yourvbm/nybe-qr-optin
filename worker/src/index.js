@@ -7,6 +7,13 @@ const VERSION = "2021-07-28";
 const MAX_INTERESTS = 5;
 const INTERESTS_FIELD_ID = "tNGIMk5n6C3uGPxQf22c"; // "Interests" custom field (contact.interests)
 
+// Must match the checkbox values in public/spin/index.html and public/inbox/index.html.
+const INTEREST_TAGS = [
+  "foodie", "wine", "culture/art", "hiking", "fishing", "camping/rving",
+  "family fun", "craft beverage", "cool towns", "events", "beach",
+  "autumn", "lodging", "winter fun", "adventure",
+];
+
 // "Foodie" / "Foodie and Wine" / "Foodie, Wine and Hiking": first word capitalized, "and" before the last.
 function formatInterestList(items) {
   if (items.length === 0) return "";
@@ -23,13 +30,19 @@ export default {
     const allow = env.ALLOWED_ORIGIN || origin;
     const cors = {
       "Access-Control-Allow-Origin": allow,
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Vary": "Origin",
     };
 
     const url = new URL(req.url);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+
+    if (url.pathname === "/api/interest-stats") {
+      if (req.method !== "GET") return j({ ok: false, error: "method_not_allowed" }, 405, cors);
+      return interestStats(env, cors);
+    }
+
     if (url.pathname !== "/api/optin") return j({ ok: false, error: "not_found" }, 404, cors);
     if (req.method !== "POST") return j({ ok: false, error: "method_not_allowed" }, 405, cors);
 
@@ -124,4 +137,38 @@ export default {
 
 function j(obj, status, cors) {
   return new Response(JSON.stringify(obj), { status, headers: { ...cors, "Content-Type": "application/json" } });
+}
+
+// Counts contacts per interest tag via /contacts/search (pageLimit:1, reads the `total` field).
+// Read-only, no PII returned -- just tag name -> count.
+async function interestStats(env, cors) {
+  const H = {
+    Authorization: `Bearer ${env.GHL_PIT}`,
+    Version: VERSION,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+
+  try {
+    const counts = await Promise.all(
+      INTEREST_TAGS.map(async (tag) => {
+        const res = await fetch(`${API}/contacts/search`, {
+          method: "POST",
+          headers: H,
+          body: JSON.stringify({
+            locationId: env.GHL_LOCATION_ID,
+            pageLimit: 1,
+            filters: [{ field: "tags", operator: "contains", value: tag }],
+          }),
+        });
+        if (!res.ok) return [tag, null];
+        const r = await res.json();
+        return [tag, typeof r.total === "number" ? r.total : null];
+      })
+    );
+
+    return j({ ok: true, generatedAt: new Date().toISOString(), counts }, 200, cors);
+  } catch {
+    return j({ ok: false, error: "upstream_unreachable" }, 502, cors);
+  }
 }
