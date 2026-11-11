@@ -102,7 +102,7 @@ export default {
     // workflow's trigger exactly, or it silently won't fire.
     const sourceTag = source === "qr-spin" ? "QR - Spin Wheel"
       : source === "qr-inbox" ? "QR - Check Inbox"
-      : source === "qr-slides" ? "QR - Slide Deck"
+      : source === "qr-slides" ? "trigger - slide deck"
       : "QR";
 
     // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
