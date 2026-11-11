@@ -94,6 +94,7 @@ export default {
 
     const sourceLabel = source === "qr-spin" ? "the Spin Wheel QR Code"
       : source === "qr-inbox" ? "the Check Inbox QR Code"
+      : source === "qr-slides" ? "the Slide Deck QR Code"
       : "a QR Code";
     // The "QR Code - Spin the Wheel" workflow on this location triggers on tag "qr - spin wheel"
     // and removes it as its own first action (by design, not a platform quirk - confirmed by
@@ -101,6 +102,7 @@ export default {
     // workflow's trigger exactly, or it silently won't fire.
     const sourceTag = source === "qr-spin" ? "QR - Spin Wheel"
       : source === "qr-inbox" ? "QR - Check Inbox"
+      : source === "qr-slides" ? "QR - Slide Deck"
       : "QR";
 
     // 2) ADDITIVE TAGS. Never a full PUT, which would replace the contact's existing tags.
