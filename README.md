@@ -5,8 +5,8 @@ same form and a different thank-you page:
 
 - `/spin/`: "All Set! You're ready to spin the wheel!" (used when the attendee spins a prize
   wheel live at the event)
-- `/slides/`: "All set! Check your inbox for the slide deck." Tags `trigger - slide deck`; needs its own GHL
-  workflow triggered on `trigger - slide deck` (removes the tag first, then sends the slide deck email)
+- `/slides/`: "All set! Check your inbox for the slide deck." Tags `QR - Slide Deck`; needs its own GHL
+  workflow triggered on that tag (removes the tag first, then sends the slide deck email)
 - `/inbox/`: "All Set! Check your inbox..." (used when there's no in-person wheel)
 
 Form fields: first name, email, zip code, choose up to 5 interests (at least one required). On
